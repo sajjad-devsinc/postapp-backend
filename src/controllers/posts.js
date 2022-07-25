@@ -31,17 +31,13 @@ const newPost = (req, res, next) => {
 
 const editPost = (req, res, next) => {
   const id = req.params.pid;
-  if (req.user._id === id) {
-    PostModel.findByIdAndUpdate(id, req.body)
+    PostModel.findOneAndUpdate({_id:id,userId:req.user._id}, req.body)
       .then((data) => {
         res.status(202).send("Post Updated Successfully");
       })
       .catch((err) => {
         res.status(400).send(err.message);
       });
-  } else {
-    res.status(400).send("Bad request invalid id");
-  }
 };
 
 const deletePost = (req, res, next) => {
