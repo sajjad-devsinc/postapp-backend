@@ -1,89 +1,73 @@
-const PostModel = require("../models/posts");
-
-const getPosts = (req, res, next) => {
-  PostModel.find({ isPublish: true })
-    .then((data) => {
-      res.status(200).json(data);
-    })
-    .catch((err) => {
-      res.status(400).send(err);
-    });
+const { validationResult } = require("express-validator");
+const ObjectId = require("mongoose").Types.ObjectId;
+const postService = require('../services/posts');
+const getPosts = async (req, res, next) => {
+  // get all posts
+  const allPosts= await postService.allPosts();
+  res.status(200).json(allPosts);
 };
 
-const newPost = (req, res, next) => {
-  if (
-    req.body.title &&
-    req.body.body &&
-    req.body.isPublish &&
-    req.body.userId
-  ) {
-    PostModel.create(req.body)
-      .then((data) => {
-        res.status(201).send("post added successfully");
-      })
-      .catch((err) => {
-        res.status(400).send(err.message);
-      });
-  } else {
-    res.status(400).send("Bad request Validation Error");
-  }
+const newPost = async (req, res, next) => {
+  // check validation
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) return res.status(400).send({ message: "fields validation failed" });
+  // check valid user to perform action
+  if (req.user._id !== req.body.userId) return res.status(401).send({ message: "unauthorized user" });
+  // add the post
+  const addPost = await postService.addPost(req);
+  res.status(201).send({ messgae: "post added successfully", post: addPost });
 };
 
-const editPost = (req, res, next) => {
-  const id = req.params.pid;
-    PostModel.findOneAndUpdate({_id:id,userId:req.user._id}, req.body)
-      .then((data) => {
-        res.status(202).send("Post Updated Successfully");
-      })
-      .catch((err) => {
-        res.status(400).send(err.message);
-      });
+const editPost = async (req, res, next) => {
+  // check validation
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) return res.status(400).send({ message: "fields validation failed" });
+  // get post id from url
+  const pid = req.params.pid;
+  // check post id is valid or not
+  if (!ObjectId.isValid(pid)) return res.status(400).send({ message: "Invalid post id Bad request" });
+  // find post by id
+  const post = await postService.findPost(pid);
+  // check valid user to perform action
+  if (req.user._id != post.userId) return res.status(401).send({ message: "unauthorized user" });
+  // edit the post
+  const editPost = await postService.updatePost(pid,req);
+  res.status(200).send({ messgae: "post edited successfully", post: editPost });
 };
 
-const deletePost = (req, res, next) => {
-  const id = req.params.pid;
-  PostModel.findOneAndRemove({ _id: id, userId: req.user._id })
-    .then((data) => {
-        if(data){
-            res.status(202).send(data+"deleted Successfully");
-        }
-        else{
-            res.status(400).send("Bad request No data found");
-        }
-
-    })
-    .catch((err) => {
-      res.status(204).send(err.message);
-    });
+const deletePost = async (req, res, next) => {
+  // get post id from url
+  const pid = req.params.pid;
+  // check post id is valid or not
+  if (!ObjectId.isValid(pid)) return res.status(400).send({ message: "Invalid post id Bad request" });
+  // find post by id
+  const post = await postService.findPost(pid);
+  // check valid user to perform action
+  if (req.user._id != post.userId) return res.status(401).send({ message: "unauthorized user" });
+  // edit the post
+  const deletePost = await postService.deletePost(pid)
+  res.status(200).send({ messgae: "post deleted successfully", post: deletePost });
 };
 
-const getUserPosts = (req, res, next) => {
-  const id = req.params.uid;
-  if (id === req.user._id) {
-    PostModel.find({ isPublish: true, userId: id })
-      .then((data) => {
-        res.status(200).json(data);
-      })
-      .catch((err) => {
-        res.status(400).send(err);
-      });
-  } else {
-    res.status(400).send("Unauthorized");
-  }
+const getUserPosts = async (req, res, next) => {
+  // get user id from params
+  const uid = req.params.uid;
+  // check user id is valid or not
+  if (!ObjectId.isValid(uid)) return res.status(400).send({ message: "Invalid user id Bad request" });
+  // check user id matches with the login user
+  if (req.user._id != uid) return res.status(401).send({ message: "unauthorized user" });
+  const userPosts = await postService.userPosts(uid);
+  res.status(200).send(userPosts);
 };
-const getUserDrafts = (req, res, next) => {
-  const id = req.params.uid;
-  if (id === req.user._id) {
-    PostModel.find({ isPublish: false, userId: id })
-      .then((data) => {
-        res.status(200).json(data);
-      })
-      .catch((err) => {
-        res.status(400).send(err);
-      });
-  } else {
-    res.status(400).send("Unauthorized");
-  }
+const getUserDrafts = async (req, res, next) => {
+  // get user id from params
+  const uid = req.params.uid;
+  // check user id is valid or not
+  if (!ObjectId.isValid(uid)) return res.status(400).send({ message: "Invalid user id Bad request" });
+  // check user id matches with the login user
+  if (req.user._id != uid) return res.status(401).send({ message: "unauthorized user" });
+  const userDrafts = await postService.userDrafts(uid);
+  res.status(200).send(userDrafts);
 };
 module.exports = {
   getPosts,
