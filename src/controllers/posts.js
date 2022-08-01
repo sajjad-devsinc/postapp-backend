@@ -7,7 +7,7 @@ const getPosts = async (req, res, next) => {
   const allPosts= await postService.findPost({ isPublish: true });
   res.status(200).json(allPosts);
   }
-  catch{
+  catch(err){
     res.status(500).send({message:"internal server error"});
   }
 };
@@ -23,7 +23,7 @@ const newPost = async (req, res, next) => {
   const addPost = await postService.addPost(req);
   res.status(201).send({ messgae: "post added successfully", post: addPost });
   }
-  catch{
+  catch(err){
     res.status(500).send({message:"internal server error"});
   }
 };
@@ -39,13 +39,13 @@ const editPost = async (req, res, next) => {
   // find post by id
   const post = await postService.findPost({ _id: pid });
   // check valid user to perform action
-  if (req.user._id != post.userId) return res.status(401).send({ message: "unauthorized user" });
+  if (req.user._id != post[0].userId) return res.status(401).send({ message: "unauthorized user" });
   // edit the post
   try{
   const editPost = await postService.updatePost(pid,req);
   res.status(200).send({ messgae: "post edited successfully", post: editPost });
   }
-  catch{
+  catch(err){
     res.status(500).send({message:"internal server error"});
   }
 };
@@ -58,13 +58,13 @@ const deletePost = async (req, res, next) => {
   // find post by id
   const post = await postService.findPost({_id: pid});
   // check valid user to perform action
-  if (req.user._id != post.userId) return res.status(401).send({ message: "unauthorized user" });
+  if (req.user._id != post[0].userId) return res.status(401).send({ message: "unauthorized user" });
   // edit the post
   try{
   const deletePost = await postService.deletePost(pid)
   res.status(200).send({ messgae: "post deleted successfully", post: deletePost });
   }
-  catch{
+  catch(err){
     res.status(500).send({message:"internal server error"});
   }
 };
@@ -80,7 +80,7 @@ const getUserPosts = async (req, res, next) => {
   const userPosts = await postService.findPost({ isPublish: true , userId: uid });
   res.status(200).send(userPosts);
   }
-  catch{
+  catch(err){
     res.status(500).send({message:"internal server error"});
   }
 };
@@ -92,10 +92,10 @@ const getUserDrafts = async (req, res, next) => {
   // check user id matches with the login user
   if (req.user._id != uid) return res.status(401).send({ message: "unauthorized user" });
   try{
-  const userDrafts = await postService.findPost({ isPublish: true , userId: uid });
+  const userDrafts = await postService.findPost({ isPublish: false , userId: uid });
   res.status(200).send(userDrafts);
   }
-  catch{
+  catch(err){
     res.status(500).send({message:"internal server error"});
   }
 };
