@@ -2,21 +2,22 @@ const createError = require('http-errors');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-var http = require('http');
 const usersRouter = require('./src/routes/users');
 const postsRouter = require('./src/routes/posts');
 const cors = require('cors');
 require('./src/middlewares/auth');
 require('dotenv').config();
 require('./src/services/db');
+
 const app = express();
-var server = http.createServer(app);
-server.listen(3000);
+
 app.use(cors({origin:'http://localhost:3001', credentials: true}));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+//Routes
 app.use('/api/users', usersRouter);
 app.use('/api/posts', postsRouter);
 
@@ -32,4 +33,6 @@ app.use(function(err, req, res, next) {
   res.send(err);
 });
 
-module.exports = app;
+const PORT = process.env.PORT || 3000;
+app.listen(PORT,()=>{console.log("server listiening on port 3000")});
+
