@@ -21,8 +21,11 @@ const login = async (req, res, next) => {
         const token = jwt.sign({ user: body }, "TOP_SECRET");
         return res
           .cookie("jwt", token, {
-            sameSite: "none",
+            sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
+            secure: process.env.NODE_ENV === "production", // must be true if sameSite='none'
             maxAge: 900000,
+            // httpOnly: true,
+            secure: true,
           })
           .json({ token });
       });
