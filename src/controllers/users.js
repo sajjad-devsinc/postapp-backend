@@ -21,6 +21,10 @@ const login = async (req, res, next) => {
         const token = jwt.sign({ user: body }, "TOP_SECRET");
         return res
           .cookie("jwt", token, {
+            sameSite: "none",
+            secure: true,
+            domain: "https://sajjad-postapp1.herokuapp.com",
+            httpOnly: true,
             maxAge: 900000,
           })
           .json({ token });
