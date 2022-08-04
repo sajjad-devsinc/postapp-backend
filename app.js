@@ -11,7 +11,7 @@ require('./src/services/db');
 
 const app = express();
 
-app.use(cors({origin:'*', credentials: true}));
+app.use(cors({origin:'https://sajjad-postapp1.herokuapp.com/', credentials: true}));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
