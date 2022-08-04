@@ -14,6 +14,19 @@ app.set("trust proxy", 1);
 
 app.use(cors({origin:'https://sajjad-postapp1.herokuapp.com', credentials: true}));
 app.use(logger('dev'));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    cookie: {
+      sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
+      maxAge: 60000000,
+      secure: process.env.NODE_ENV === "production",
+    },
+    resave: true,
+    saveUninitialized: false,
+    ttl: 60 * 60 * 24 * 30
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
