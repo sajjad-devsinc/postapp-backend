@@ -33,6 +33,6 @@ app.use(function(err, req, res, next) {
   res.send(err);
 });
 
-const PORT = process.env.PORT || 8080;
-app.listen(PORT,()=>{console.log("server listiening on port 8080")});
+const PORT = process.env.PORT || 3000;
+app.listen(PORT,()=>{console.log("server listiening on port 3000")});
 
