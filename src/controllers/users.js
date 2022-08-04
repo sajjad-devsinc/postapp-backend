@@ -23,8 +23,7 @@ const login = async (req, res, next) => {
           .cookie("jwt", token, {
             sameSite: "none",
             secure: true,
-            domain: "https://sajjad-postapp1.herokuapp.com",
-            httpOnly: true,
+            domain: "sajjad-postapp1.herokuapp.com",
             maxAge: 900000,
           })
           .json({ token });
