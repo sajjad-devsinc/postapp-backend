@@ -22,8 +22,6 @@ const login = async (req, res, next) => {
         return res
           .cookie("jwt", token, {
             maxAge: 900000,
-            sameSite: none,
-
           })
           .json({ token });
       });
