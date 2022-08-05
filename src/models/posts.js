@@ -1,6 +1,8 @@
 const { ObjectId } = require("mongoose");
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
+// indexes for searching
+// refrence
 const PostSchema = new Schema({
   title: { type: String, required: true },
   body: { type: String, required: true },

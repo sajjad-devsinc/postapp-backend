@@ -1,17 +1,17 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const { Schema } = mongoose;
-
+// validation
 const UserSchema = new Schema({
   email: { type: String, required: true, unique: true },
   name: { type: String, required: true },
   password: { type: String, required: true },
 });
-
+// when password change use hash
 UserSchema.pre("save", async function (next) {
   console.log(this);
   const user = this;
-  const hash = await bcrypt.hash(this.password, 10);
+  const hash = bcrypt.hash(this.password, 10);
   console.log(hash);
   this.password = hash;
   next();
