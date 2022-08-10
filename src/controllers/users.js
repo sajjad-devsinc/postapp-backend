@@ -21,12 +21,10 @@ const login = async (req, res, next) => {
         const token = jwt.sign({ user: body }, "TOP_SECRET");
         return res
           .cookie("jwt", token, {
-            sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
-            secure: process.env.NODE_ENV === "production", // must be true if sameSite='none'
-            maxAge: 900000,
-            // httpOnly: true,
+            httpOnly: false,
             secure: true,
           })
+          .status(200)
           .json({ token });
       });
     } catch (error) {
