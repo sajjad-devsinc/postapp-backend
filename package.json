@@ -1,29 +1,38 @@
 {
-  "name": "post-app",
-  "version": "0.0.0",
-  "private": true,
-  "main" : "app.js",
-  "scripts": {
-    "start": "node app.js"
-  },
-  "dependencies": {
-    "bcrypt": "^4.0.1",
-    "body-parser": "^1.19.0",
-    "cookie-parser": "~1.4.4",
-    "cors": "^2.8.5",
-    "debug": "~2.6.9",
-    "dotenv": "^16.0.1",
-    "express": "^4.17.1",
-    "express-validator": "^6.14.2",
-    "http-errors": "~1.6.3",
-    "jade": "~1.11.0",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.9.15",
-    "morgan": "~1.9.1",
-    "nodemon": "^2.0.19",
-    "passport": "^0.4.1",
-    "passport-jwt": "^4.0.0",
-    "passport-local": "^1.0.0",
-    "serve": "^14.0.1"
-  }
+    "name": "post-app",
+    "version": "0.0.0",
+    "private": true,
+    "main": "app.js",
+    "scripts": {
+        "start": "node app.js",
+        "format:check": "prettier --check .",
+        "format:write": "prettier --write .",
+        "lint:check": "eslint .",
+        "lint:fix": "eslint --fix ."
+    },
+    "dependencies": {
+        "bcrypt": "^4.0.1",
+        "body-parser": "^1.19.0",
+        "cookie-parser": "~1.4.4",
+        "cors": "^2.8.5",
+        "debug": "~2.6.9",
+        "dotenv": "^16.0.1",
+        "express": "^4.17.1",
+        "express-validator": "^6.14.2",
+        "http-errors": "~1.6.3",
+        "jade": "~1.11.0",
+        "jsonwebtoken": "^8.5.1",
+        "mongoose": "^5.9.15",
+        "morgan": "~1.9.1",
+        "nodemon": "^2.0.19",
+        "passport": "^0.4.1",
+        "passport-jwt": "^4.0.0",
+        "passport-local": "^1.0.0",
+        "serve": "^14.0.1"
+    },
+    "devDependencies": {
+        "eslint": "^8.21.0",
+        "eslint-config-prettier": "^8.5.0",
+        "prettier": "^2.7.1"
+    }
 }
