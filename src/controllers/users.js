@@ -1,5 +1,6 @@
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
+
 const signup = (req, res, next) => {
   res.json({
     message: "Signup successful",
@@ -15,22 +16,34 @@ const login = async (req, res, next) => {
         return next(error);
       }
 
-      req.login(user, { session: false }, async (error) => {
-        if (error) return next(error);
-        const body = { _id: user._id, email: user.email };
-        const token = jwt.sign({ user: body }, "TOP_SECRET");
-        return res
-          .cookie("jwt", token, {
-            httpOnly: false,
-            secure: true,
-          })
-          .status(200)
-          .json({ token });
-      });
+      req.login(
+        user,
+        {
+          session: false,
+        },
+        async (error) => {
+          if (error) return next(error);
+          const body = {
+            _id: user._id,
+          };
+          const token = jwt.sign(
+            {
+              user: body,
+            },
+            "TOP_SECRET"
+          );
+          return res.json({
+            token,
+          });
+        }
+      );
     } catch (error) {
       return next(error);
     }
   })(req, res, next);
 };
 
-module.exports = { signup, login };
+module.exports = {
+  signup,
+  login,
+};

@@ -1,18 +1,27 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const { Schema } = mongoose;
-// validation
+
 const UserSchema = new Schema({
-  email: { type: String, required: true, unique: true },
-  name: { type: String, required: true },
-  password: { type: String, required: true },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  name: {
+    type: String,
+    required: true,
+    minLength: 6,
+  },
+  password: {
+    type: String,
+    required: true,
+    minLength: 8,
+  },
 });
-// when password change use hash
-UserSchema.pre("save", async function (next) {
-  console.log(this);
-  const user = this;
+
+UserSchema.pre("save", function (next) {
   const hash = bcrypt.hash(this.password, 10);
-  console.log(hash);
   this.password = hash;
   next();
 });
@@ -20,9 +29,8 @@ UserSchema.pre("save", async function (next) {
 UserSchema.methods.isValidPassword = async function (password) {
   const user = this;
   const compare = await bcrypt.compare(password, user.password);
-
   return compare;
 };
-const UserModel = mongoose.model("user", UserSchema);
 
+const UserModel = mongoose.model("user", UserSchema);
 module.exports = UserModel;

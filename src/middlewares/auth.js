@@ -4,8 +4,10 @@ const JWTstrategy = require("passport-jwt").Strategy;
 const ExtractJWT = require("passport-jwt").ExtractJwt;
 const UserModel = require("../models/users");
 require("dotenv").config();
+
 passport.use(
   "signup",
+  // eslint-disable-next-line new-cap
   new localStrategy(
     {
       usernameField: "email",
@@ -15,7 +17,11 @@ passport.use(
     async (req, email, password, done) => {
       const name = req.body.name;
       try {
-        const user = await UserModel.create({ email, password, name });
+        const user = await UserModel.create({
+          email,
+          password,
+          name,
+        });
         return done(null, user);
       } catch (error) {
         done(error.message);
@@ -26,6 +32,7 @@ passport.use(
 
 passport.use(
   "login",
+  // eslint-disable-next-line new-cap
   new localStrategy(
     {
       usernameField: "email",
@@ -33,19 +40,27 @@ passport.use(
     },
     async (email, password, done) => {
       try {
-        const user = await UserModel.findOne({ email });
+        const user = await UserModel.findOne({
+          email,
+        });
 
         if (!user) {
-          return done(null, false, { message: "User not found" });
+          return done(null, false, {
+            message: "User not found",
+          });
         }
 
         const validate = await user.isValidPassword(password);
 
         if (!validate) {
-          return done(null, false, { message: "Wrong Password" });
+          return done(null, false, {
+            message: "Wrong Password",
+          });
         }
 
-        return done(null, user, { message: "Logged in Successfully" });
+        return done(null, user, {
+          message: "Logged in Successfully",
+        });
       } catch (error) {
         return done(error);
       }
@@ -59,6 +74,7 @@ passport.use(
       secretOrKey: "TOP_SECRET",
       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
     },
+
     async (token, done) => {
       try {
         return done(null, token.user);

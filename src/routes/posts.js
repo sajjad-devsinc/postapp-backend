@@ -3,14 +3,14 @@ const passport = require("passport");
 const postValidation = require("../middlewares/post-validation");
 const router = express.Router();
 const {
-  getPosts,
   newPost,
-  getUserPosts,
+  getPosts,
   getUserDrafts,
+  getUserPosts,
   editPost,
   deletePost,
 } = require("../controllers/posts");
-//highorder middle ware
+
 router.get("/", getPosts);
 router.post(
   "/",
