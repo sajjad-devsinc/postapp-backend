@@ -1,6 +1,6 @@
-const { validationResult } = require('express-validator')
 const ObjectId = require('mongoose').Types.ObjectId
 const postService = require('../services/posts')
+
 const getPosts = async (req, res) => {
     // get all posts
     try {
@@ -12,10 +12,6 @@ const getPosts = async (req, res) => {
 }
 
 const newPost = async (req, res) => {
-    // check validation
-    const errors = validationResult(req)
-    if (!errors.isEmpty())
-        return res.status(400).send({ message: 'fields validation failed' })
     // check valid user to perform action
     if (req.user._id !== req.body.userId)
         return res.status(401).send({ message: 'unauthorized user' })
@@ -32,10 +28,6 @@ const newPost = async (req, res) => {
 }
 
 const editPost = async (req, res) => {
-    // check validation
-    const errors = validationResult(req)
-    if (!errors.isEmpty())
-        return res.status(400).send({ message: 'fields validation failed' })
     // get post id from url
     const pid = req.params.pid
     // check post id is valid or not

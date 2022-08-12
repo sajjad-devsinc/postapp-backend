@@ -1,4 +1,4 @@
-const { body } = require('express-validator')
+const { body, validationResult } = require('express-validator')
 exports.validate = (method) => {
     // use method for validation
     switch (method) {
@@ -10,6 +10,12 @@ exports.validate = (method) => {
                     .exists()
                     .isBoolean(),
                 body('userId', 'There should be a proper userID').isMongoId(),
+                (req, res, next) => {
+                    const errors = validationResult(req)
+                    if (!errors.isEmpty())
+                        return res.status(422).json({ errors: errors.array() })
+                    next()
+                },
             ]
         }
         case 'editPost': {
@@ -20,6 +26,12 @@ exports.validate = (method) => {
                     .exists()
                     .isBoolean(),
                 body('userId', 'There should be a proper userID').isMongoId(),
+                (req, res, next) => {
+                    const errors = validationResult(req)
+                    if (!errors.isEmpty())
+                        return res.status(422).json({ errors: errors.array() })
+                    next()
+                },
             ]
         }
     }

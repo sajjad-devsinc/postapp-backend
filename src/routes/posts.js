@@ -10,6 +10,7 @@ const {
     editPost,
     deletePost,
 } = require('../controllers/posts')
+
 //highorder middle ware
 router.get('/', getPosts)
 router.post(
