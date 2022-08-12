@@ -10,6 +10,6 @@ router.post(
     userValidation.validate('signup'),
     signup
 )
-router.post('/login', userValidation.validate('login'), login)
+router.post('/login', login)
 
 module.exports = router

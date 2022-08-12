@@ -1,4 +1,4 @@
-const { body } = require('express-validator')
+const { body, validationResult } = require('express-validator')
 exports.validate = (method) => {
     // use method for validation
     switch (method) {
