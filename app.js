@@ -12,7 +12,10 @@ const app = express()
 app.set('trust proxy', 1)
 
 app.use(
-    cors({ origin: 'https://postapp-apis.herokuapp.com/', credentials: true })
+    cors({
+        origin: 'https://postapp-frontend.herokuapp.com',
+        credentials: true,
+    })
 )
 app.use(logger('dev'))
 app.use(express.json())
