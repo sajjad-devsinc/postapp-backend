@@ -11,7 +11,9 @@ require('./src/services/db')
 const app = express()
 app.set('trust proxy', 1)
 
-app.use(cors({ origin: 'http://localhost:3001', credentials: true }))
+app.use(
+    cors({ origin: 'https://postapp-apis.herokuapp.com/', credentials: true })
+)
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
