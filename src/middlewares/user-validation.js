@@ -9,7 +9,7 @@ exports.validate = (method) => {
                     .isEmail(),
                 body('name', 'there should be a proper username')
                     .exists()
-                    .isLength({ min: 6 }),
+                    .isLength({ min: 2 }),
                 body(
                     'password',
                     'Please enter a password at least 8 character and contain At least one uppercase.At least one lower case.At least one special character. '
